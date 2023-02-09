@@ -25,6 +25,7 @@ from .wav2lip_model import cosine_loss, get_sync_loss
 
 from ..solver import build_optimizer
 from ..modules.init import init_weights
+import logging
 
 SYNCNET_WEIGHT_URL = 'https://paddlegan.bj.bcebos.com/models/syncnet.pdparams'
 
@@ -51,6 +52,7 @@ class Wav2LipModelHq(BaseModel):
             opt (config dict)-- stores all the experiment flags; needs to be a subclass of Dict
         """
         super(Wav2LipModelHq, self).__init__()
+        self.logger = logging.getLogger(__name__)
         self.syncnet_wt = syncnet_wt
         self.disc_wt = disc_wt
         self.is_train = is_train
@@ -199,7 +201,7 @@ class Wav2LipModelHq(BaseModel):
             if averaged_sync_loss < .75:
                 self.syncnet_wt = 0.01
 
-            print(
+            self.logger.info(
                 'L1: {}, Sync loss: {}, Percep: {}, Fake: {}, Real: {}'.format(
                     averaged_recon_loss, averaged_sync_loss,
                     averaged_perceptual_loss, averaged_disc_fake_loss,

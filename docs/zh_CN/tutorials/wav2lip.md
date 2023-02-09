@@ -64,9 +64,7 @@ python tools/main.py --config-file configs/wav2lip_hq.yaml
 - GPU多卡训练:
 ```
 export CUDA_VISIBLE_DEVICES=0,1,2,3
-python -m paddle.distributed.launch \
-    tools/main.py \
-    --config-file configs/wav2lip_hq.yaml \
+python -m paddle.distributed.launch tools/main.py --config-file configs/wav2lip_hq.yaml
 
 ```
 

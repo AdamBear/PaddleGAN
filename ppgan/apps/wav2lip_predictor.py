@@ -128,6 +128,7 @@ class Wav2LipPredictor(BasePredictor):
 
         for i, m in enumerate(mels):
             idx = 0 if self.static else i % len(frames)
+
             frame_to_save = frames[idx].copy()
             face, coords = face_det_results[idx].copy()
 
@@ -228,7 +229,7 @@ class Wav2LipPredictor(BasePredictor):
             )
 
         mel_chunks = []
-        mel_idx_multiplier = 80. / fps
+        mel_idx_multiplier = 40. / fps
         i = 0
         while 1:
             start_idx = int(i * mel_idx_multiplier)

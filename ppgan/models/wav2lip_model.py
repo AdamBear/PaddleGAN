@@ -26,7 +26,7 @@ from ..modules.init import init_weights
 SYNCNET_WEIGHT_URL = 'https://paddlegan.bj.bcebos.com/models/syncnet.pdparams'
 syncnet_T = 5
 syncnet_mel_step_size = 16
-import loggin
+import logging
 
 def cosine_loss(a, v, y):
     logloss = paddle.nn.BCELoss()

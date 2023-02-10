@@ -26,7 +26,7 @@ from ..modules.init import init_weights
 SYNCNET_WEIGHT_URL = 'https://paddlegan.bj.bcebos.com/models/syncnet.pdparams'
 syncnet_T = 5
 syncnet_mel_step_size = 16
-
+import loggin
 
 def cosine_loss(a, v, y):
     logloss = paddle.nn.BCELoss()
@@ -66,6 +66,7 @@ class Wav2LipModel(BaseModel):
             opt (config dict)-- stores all the experiment flags; needs to be a subclass of Dict
         """
         super(Wav2LipModel, self).__init__()
+        self.logger = logging.getLogger(__name__)
         self.syncnet_wt = syncnet_wt
         self.is_train = is_train
         self.eval_step = 0
@@ -144,7 +145,7 @@ class Wav2LipModel(BaseModel):
             if averaged_sync_loss < .75:
                 self.syncnet_wt = 0.01
 
-            print('L1: {}, Sync loss: {}'.format(averaged_recon_loss,
+            self.logger.info('L1: {}, Sync loss: {}'.format(averaged_recon_loss,
                                                  averaged_sync_loss))
             self.eval_step = 0
             self.eval_sync_losses, self.eval_recon_losses = [], []

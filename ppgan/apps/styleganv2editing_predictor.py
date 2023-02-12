@@ -50,12 +50,7 @@ class StyleGANv2EditingPredictor(StyleGANv2Predictor):
             np.load(latent)).unsqueeze(0).astype('float32')
         direction = self.directions[direction].unsqueeze(0).astype('float32')
 
-        latent_n = paddle.concat([latent, latent + offset * direction], 0)
-        generator = self.generator
-        img_gen, _ = generator([latent_n],
-                               input_is_latent=True,
-                               randomize_noise=False)
-        imgs = make_image(img_gen)
+        imgs = self.gen(latent, direction, offset)
         src_img = imgs[0]
         dst_img = imgs[1]
 
@@ -70,3 +65,12 @@ class StyleGANv2EditingPredictor(StyleGANv2Predictor):
         np.save(save_npy_path, dst_latent)
 
         return src_img, dst_img, dst_latent
+
+    def gen(self, latent, direction, offset):
+        latent_n = paddle.concat([latent, latent + offset * direction], 0)
+        generator = self.generator
+        img_gen, _ = generator([latent_n],
+                               input_is_latent=True,
+                               randomize_noise=False)
+        imgs = make_image(img_gen)
+        return imgs

@@ -229,7 +229,7 @@ class Wav2LipPredictor(BasePredictor):
             )
 
         mel_chunks = []
-        mel_idx_multiplier = 40. / fps
+        mel_idx_multiplier = 80. / fps
         i = 0
         while 1:
             start_idx = int(i * mel_idx_multiplier)

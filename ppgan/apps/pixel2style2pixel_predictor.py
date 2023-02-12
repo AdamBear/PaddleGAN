@@ -216,7 +216,7 @@ class Pixel2Style2PixelPredictor(BasePredictor):
     def run(self, image):
         src_img = run_alignment(image)
         src_img = np.asarray(src_img)
-        dst_npy, src_img, dst_img = self.get_vec(src_img)
+        dst_npy, dst_img = self.get_vec(src_img)
 
         os.makedirs(self.output_path, exist_ok=True)
         save_src_path = os.path.join(self.output_path, 'src.png')

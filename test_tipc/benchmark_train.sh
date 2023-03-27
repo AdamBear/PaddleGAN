@@ -69,16 +69,11 @@ MODE=$2
 PARAMS=$3
 REST_ARGS=$4
 
-# for log name
 to_static=""
 # parse "to_static" options and modify trainer into "to_static_trainer"
-if [ $REST_ARGS = "to_static" ] || [ $PARAMS = "to_static" ] ;then
+if [[ $PARAMS =~ "dynamicTostatic" ]] ;then
    to_static="d2sT_"
    sed -i 's/trainer:norm_train/trainer:to_static_train/g' $FILENAME
-   # clear PARAM contents
-   if [ $PARAMS = "to_static" ] ;then
-    PARAMS=""
-   fi
 fi
 
 IFS=$'\n'
@@ -90,7 +85,7 @@ lines=(${dataline})
 model_name=$(func_parser_value "${lines[1]}")
 
 # 获取benchmark_params所在的行数
-line_num=`grep -n "train_benchmark_params" $FILENAME  | cut -d ":" -f 1`
+line_num=`grep -n -w "train_benchmark_params" $FILENAME  | cut -d ":" -f 1`
 # for train log parser
 batch_size=$(func_parser_value "${lines[line_num]}")
 line_num=`expr $line_num + 1`
@@ -137,6 +132,13 @@ func_sed_params "$FILENAME" "${line_python}"  "$python"
 if  [ ! -n "$PARAMS" ] ;then
     # PARAMS input is not a word.
     IFS="|"
+    batch_size_list=(${batch_size})
+    fp_items_list=(${fp_items})
+    device_num_list=(N1C4)
+    run_mode="DP"
+elif [[ ${PARAMS} = "dynamicTostatic" ]] ;then
+    IFS="|"
+    model_type=$PARAMS
     batch_size_list=(${batch_size})
     fp_items_list=(${fp_items})
     device_num_list=(N1C4)
